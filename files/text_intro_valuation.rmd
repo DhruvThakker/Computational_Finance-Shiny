@@ -1,0 +1,3 @@
+Nothing to see in the theoretical section of option valuation yet...
+
+More information will be added later. In the meantime, have a look at the binomial and Black-Scholes model, where the application of the theory is explained.
