@@ -324,3 +324,114 @@ fAmerican <- function(type, underlying, strike, dividendYield, riskFreeRate, mat
   return(c(value = price, unlist(greek_res)))
 }
 
+################# 2D Random Walk #########################
+check_x <- function(x){
+  # This function is used to check the input is a valid integer
+  if(x<=0){stop("steps must be greater than zero")}
+  if(x%%1!=0){stop("steps must be an integer")}
+  TRUE
+}
+RandomWalk2d_oop <- function(step,result=0){
+  # This function is used to generate random walk in two space dimensions without for loop. 
+  # It is almost same with the function in question 3. 
+  # But this time, we need to return start position and samples 
+  # in order to calculate how many step the point move to each direction.
+  
+  # steps : the number of steps to be taken. 
+  # result : what kind of result you want to get.
+  # 0 output the final position. 1 output the full path.
+  
+  # When result = 0, the function will generate the final position.
+  # When result = 1, the function will generate a list including start point, 
+  # sample steps and trace in order to be used in oop function
+  
+  check_x(step)
+  # check steps to make sure all steps are positive integer
+  samples <- matrix(0, ncol = 2, nrow = step)
+  position <- matrix(0, ncol = 2, nrow = step)
+  index_xy <- cbind(seq(step),sample(c(1,2),step,TRUE))  
+  samples[index_xy] <- sample(c(-1,1),step,TRUE) 
+  # do the random sampling at one time instead of using for loop
+  position[,1] <- cumsum(samples[,1])
+  position[,2] <- cumsum(samples[,2])
+  trace <- cbind(position[,1],position[,2])
+  trace <- rbind(c(0,0),trace)
+  final_position <- tail(trace,1)
+  if(result==0){
+      return(final_position)
+    }
+    if(result==1){
+      return(list(
+        start = c(0,0),
+        samples = samples,
+        trace = trace))
+    }
+}
+f1 <- function(step){
+  # This function is used to generate S3 class "RandomWalk"
+  
+  # steps : the number of steps to be taken. 
+  # result : what kind of result you want to get. 
+  # The output will be a class of "RandomWalk". 
+  
+  # Method: 
+  # summary: print out the start position, final position 
+  #          and how many steps move to each directions 
+  # plot: print the full path in a plot
+  # "[": extract value from trace to print out the position of the i-th step
+  # "[<-": move the origin and the entire walk
+  Random_Walk <- RandomWalk2d_oop(step, result = 1)
+  final <- list(
+    start = Random_Walk$start,
+    samples = Random_Walk$samples,
+    trace = Random_Walk$trace,
+    right = sum(Random_Walk$samples[,1]==1),
+    left = sum(Random_Walk$samples[,1]==-1),
+    up = sum(Random_Walk$samples[,2]==1),
+    down = sum(Random_Walk$samples[,2]==-1)
+  )
+  class(final) <- "RandomWalk"
+  final
+}
+summary.RandomWalk <- function(object){
+  # summary method
+  structure(object, class=c("summary.RandomWalk", class(object)))
+}
+print.summary.RandomWalk <- function(x,...){
+  # summary print method
+  cat('object "RawndomWalk"\n')
+  start <- paste("(",x$start[1],",",x$start[2], ")",sep="")
+  cat("The start point is :", start, "\n")
+  display <- paste("(",tail(x$trace,1)[1],",",tail(x$trace,1)[2],")",sep = "")
+  cat("The final position is :", display,"\n")
+  cat(x$right,"steps move to right", "\n")
+  cat(x$left,"steps move to left", "\n")
+  cat(x$up,"steps move to up", "\n")
+  cat(x$down,"steps move to down", "\n")
+  cat("The total steps is", sum(x$right,x$left,x$up,x$down) ,"\n" )
+  invisible(x)
+}
+plot.RandomWalk <- function(x, ...){
+  # plot method
+  plot(x$trace,type="l")
+}
+"[.RandomWalk" <- function(x,i){
+  # extract method
+  x$trace[i,]
+}
+check_value <- function(value){
+  # This function is used to check the whether the input is a 2-dim vector with integer values
+  if(length(value)>2|length(value)<2){stop("'value' must have exact two values")}
+  if(value[1]%%1!=0|value[2]%%1!=0){stop("'value' must be two integer")}
+  TRUE
+}
+"start<-" <- function(x,value){
+  check_value(value)
+  x$start=x$start+value
+  x$trace[,1] <- x$trace[,1]+value[1] 
+  x$trace[,2] <- x$trace[,2]+value[2]
+  return(x)
+}
+start <-  function(x,value) UseMethod("start<-")
+#my_walk <- f1(500) 
+#summary(my_walk)

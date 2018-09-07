@@ -177,15 +177,56 @@ price_ui <- function() {
   )
 }
 
+randomwalk_ui <- function() {
+
+  fluidPage(
+    tabsetPanel(
+      tabPanel("Random Walk 1D",
+        htmlOutput("random_1d")        
+      ),
+      tabPanel("Random Walk 2D",
+        sidebarLayout(
+          sidebarPanel(
+            numericInput("x_position", "x-axis start position:", 
+                        min = -10, max = 10, value  = 0),
+            numericInput("y_position", "y-axis start position:", 
+                        min = -10, max = 10, value  = 0),
+            sliderInput("steps", "Number of steps:",
+                        min=20, max=10000, value=3756),
+            numericInput("seed", "Random seed:", 
+                        value  = 12345),
+            sliderInput("size", "Size of the points:",
+                        min=0, max=3, value=1),
+            sliderInput("width", "Width of the line-path:",
+                        min=0, max=5, value=1),
+            h4("Final position:"),
+            textOutput("final")
+            
+          ),
+          
+          # Show a plot of the generated distribution
+          mainPanel(
+            plotOutput("path_plot")
+          )
+        )
+      )
+    )
+  )
+}
+
+
 
 # main_file for the main-tabs 
 main_ui <- shinyUI(
-  navbarPage("Options 101",
+  navbarPage("Classroom Computational Finance",
              tabPanel("Payoff",
                       payoff_ui()
              ),   
              tabPanel("Valuation", 
                       price_ui()
+             ),
+             tabPanel("Random Walks",
+                      randomwalk_ui()
              )
             # tabPanel("Price and the Greeks",
             #          greek_ui()
@@ -452,6 +493,27 @@ $$ N(-d2) = N(%.03f) = %.03f, $$
     }
   })
   
+  output$random_1d <- renderUI({includeHTML("files/text_intro_valuation.html")})
+
+  result <- reactive({
+    my_walk <- f1(input$steps)
+    points <- c(input$x_position, input$y_position)
+    start(my_walk) <- points
+    set.seed(input$seed)
+    my_walk
+  })
+  
+  output$path_plot <- renderPlot({
+    # plot of path_plot
+    plot(result(),cex=input$size,pch="*",lwd=input$width,lty=2,col="#88888844")
+    points(result()$trace[1,1],result()$trace[1,2],col="orange",cex=4,pch="*")
+    points(tail(result()$trace,1)[1],tail(result()$trace,1)[2],col="red",cex=4,pch="*")
+  })
+  
+  output$final <- renderText({
+    paste("(",tail(result()$trace,1)[1],",",tail(result()$trace,1)[2],")")
+  })
+
 }
 
 ########################################################################
