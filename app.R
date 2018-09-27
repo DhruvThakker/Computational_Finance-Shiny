@@ -20,9 +20,9 @@ library(fOptions)
 source("R/functions.R")
 
 # uncomment this if the text-files should be recompiled
-#rmdfiles <- c("files/about.Rmd", "files/text_intro_options.Rmd", "files/text_intro_valuation.Rmd")
-#sapply(rmdfiles, knit, quiet = T)
-#sapply(rmdfiles, render, quiet = T)
+# rmdfiles <- c("files/about.Rmd", "files/text_intro_options.Rmd", "files/text_intro_valuation.Rmd")
+# sapply(rmdfiles, knit, quiet = T)
+# sapply(rmdfiles, render, quiet = T)
 
 ########################################################################
 # UI #
@@ -40,8 +40,12 @@ source("UI/valuationUi.R")
 #Random Walk UI
 source("UI/randomwalkUi.R")
 
+#About UI
+source("UI/aboutUi.R")
+
 #Main UI
 source("UI/mainUi.R")
+
 
 
 ########################################################################

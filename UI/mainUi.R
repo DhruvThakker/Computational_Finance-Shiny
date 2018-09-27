@@ -9,14 +9,13 @@ main_ui <- shinyUI(
              ),
              tabPanel("Random Walks",
                       randomwalk_ui()
-             )
+             ),
             # tabPanel("Price and the Greeks",
             #          greek_ui()
             # ),
-            # tabPanel("About",
-            #          helpText("v 0.1 @ 2017", br(), 
-            #                   "David Zimmermann", br(),
-            #                   "david_j_zimmermann[at]hotmail.com", br(),
-            #                   "All feedback welcome!"))
+              tabPanel("About",
+                       #helpText("v 0.1 @ 2017", br())
+                       about_ui()
+                                )
   )
 )

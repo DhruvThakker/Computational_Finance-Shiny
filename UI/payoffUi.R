@@ -18,7 +18,7 @@ payoff_ui <- function() {
       textOutput("text_new_option"),
       br(),
       helpText("The premium is automatically calculated for a given volatility\n",
-               "and for an underlying currently worth $100.")
+               "and for an underlying currently worth ₹100.")
     ),
     mainPanel = mainPanel(
       tabsetPanel(

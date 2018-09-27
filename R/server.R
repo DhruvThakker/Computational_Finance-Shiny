@@ -270,4 +270,7 @@ server_fun <- function(input, output, session) {
     paste("(",tail(resultRandom()$trace,1)[1],",",tail(resultRandom()$trace,1)[2],")")
   })
 
+  #About Page
+  output$about_page <- renderUI({includeHTML("files/about.html")})
+
 }

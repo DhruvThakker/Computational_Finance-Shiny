@@ -1,4 +1,4 @@
-Dhruv
+
 # Option Valuation
 A shiny application to explore the basics of option valuations
 
@@ -6,7 +6,11 @@ To run the project either fork/download the files and run the `app.R`-file, or i
 ```r
 shiny::runGitHub('Computational_Finance-Shiny', 'DhruvThakker')
 ```
+OR
 
+```r
+shiny::runApp()
+```
 In order to run the project properly, you need to have the following packages installed: `data.table`, `DT`, `ggplot2`, `knitr`, `magrittr`, `rmarkdown`, `fOptions`, and `shiny`.
 
 To install all packages you can also use 
