@@ -18,8 +18,8 @@ valuation_ui <- function() {
                  sliderInput("I_price_value_underlying", "Current Value Underlying (in ₹)",
                              value = 100,
                              min = 1, max = 250),
-                 sliderInput("I_price_tick", "Tick (in ₹)", value = 10,
-                             min = 0, max = 50),
+                 sliderInput("I_price_u", " u (in %)", value =20,
+                             min = 1, max = 100),
                  sliderInput("I_price_rf", "Risk-Free Rate (in %)", value = 1,
                              min = 0, max = 20)
                ),

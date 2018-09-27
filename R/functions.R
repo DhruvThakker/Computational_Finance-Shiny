@@ -245,13 +245,16 @@ get_nodes <- function(n_steps) {
   
   return(res2)
 }
-create_tree <- function(n_steps, type = "call", s_0 = 100, tick = 10, k = 100, rf = 0.1) {
+create_tree <- function(n_steps, type = "call", s_0 = 100, u = 0.5, k = 100, rf = 0.1) {
   
   edges <- get_edges(n_steps)
   nodes <- get_nodes(n_steps)
-  
-  
-  nodes[, s_t := y*tick + s_0]
+  U = 1+u/100
+  D = 1-u/100
+  qu = ((1+rf)-D)/(U-D)
+  qd = (U-(1+rf))/(U-D)
+  nodes[, s_t := ifelse(y>0, U^y*s_0, D^(-y)*s_0)]
+  #nodes[, s_t := y*tick + s_0]
   
   if (type == "call") {
     nodes[x == max(x), c_t := ifelse(s_t > k, s_t - k, 0)]
@@ -273,15 +276,17 @@ create_tree <- function(n_steps, type = "call", s_0 = 100, tick = 10, k = 100, r
     tmp <- merge(tmp, nodes_down, by = "y", all.x = T)
     tmp[, delta := (c_u - c_d) / (s_u - s_d)]
     tmp[, b := (c_d - s_d * delta) / (1 + rf)]
-    tmp[, c_t := s_t * delta + b]
+    tmp[, c_t := (qu*c_u + qd*c_d)*(1+rf)]
     nodes <- rbindlist(list(tmp[, .(x, y, s_t, c_t, delta, b)],
                             nodes[x != lvl,]))
   }
   
   nodes[, label := paste("S[t] = ", s_t, 
-                         "\nDelta = ", round(delta, 4),
-                         "\nB = ", round(b, 4),
-                         "\nC[t] = ", round(c_t, 4))]
+                         #"\nDelta = ", round(delta, 4),
+                         #"\nB = ", round(b, 4),
+                         "\nC[t] = ", round(c_t, 4),
+                         "\nqu = ", round(U,4))
+                         ]
   
   ggplot() + 
     theme_void() +
@@ -294,6 +299,7 @@ create_tree <- function(n_steps, type = "call", s_0 = 100, tick = 10, k = 100, r
     scale_y_continuous(limits = c(-1,1) + range(nodes$y))
   
 }
+
 fEuropean <- function(type, underlying, strike, dividendYield, riskFreeRate, maturity, volatility) {
   type <- tolower(type)
   stopifnot(type %in% c("call", "put"))
@@ -310,6 +316,7 @@ fEuropean <- function(type, underlying, strike, dividendYield, riskFreeRate, mat
   names(greek_res) <- greeks
   return(c(value = price, unlist(greek_res)))
 }
+
 fAmerican <- function(type, underlying, strike, dividendYield, riskFreeRate, maturity, volatility) {
   type <- tolower(type)
   stopifnot(type %in% c("call", "put"))

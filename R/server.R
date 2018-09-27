@@ -168,7 +168,7 @@ server_fun <- function(input, output, session) {
     create_tree(n_steps = input$I_price_n_steps,
                 type = ifelse(input$I_price_type == 1, "call", "put"),
                 s_0 = input$I_price_value_underlying, 
-                tick = input$I_price_tick, 
+                u = input$I_price_u, 
                 k = input$I_price_strike, 
                 rf = input$I_price_rf/100)
   }, height = 700)
