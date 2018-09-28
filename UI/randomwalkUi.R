@@ -30,6 +30,11 @@ randomwalk_ui <- function() {
             plotOutput("path_plot")
           )
         )
+      ),
+      tabPanel("Lecture Notes", 
+                 tags$iframe(style="height:500px; width:100%; scrolling=yes", 
+                  src="Random_Walks.pdf#zoom=50&toolbar=0&navpanes=0"
+              )       
       )
     )
   )
