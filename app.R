@@ -40,6 +40,9 @@ source("UI/valuationUi.R")
 #Random Walk UI
 source("UI/randomwalkUi.R")
 
+#Brownian UI
+source("UI/geometricbrownianUi.R")
+
 #About UI
 source("UI/aboutUi.R")
 

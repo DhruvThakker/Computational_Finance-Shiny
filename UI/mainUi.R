@@ -13,7 +13,10 @@ main_ui <- shinyUI(
             # tabPanel("Price and the Greeks",
             #          greek_ui()
             # ),
-              tabPanel("About",
+             tabPanel("Geometric Browian Motion",
+                      geometricbrownian_ui()
+             ),
+             tabPanel("About",
                        #helpText("v 0.1 @ 2017", br())
                        about_ui()
                                 )
