@@ -16,6 +16,9 @@ main_ui <- shinyUI(
              tabPanel("Geometric Browian Motion",
                       geometricbrownian_ui()
              ),
+             tabPanel("American Option Pricing",
+                      americanoption_ui()
+             ),
              tabPanel("About",
                        #helpText("v 0.1 @ 2017", br())
                        about_ui()

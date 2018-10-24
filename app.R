@@ -16,7 +16,7 @@ library(rmarkdown)
 library(shiny)
 
 library(fOptions)
-
+library(sde)
 source("R/functions.R")
 
 # uncomment this if the text-files should be recompiled
@@ -42,6 +42,9 @@ source("UI/randomwalkUi.R")
 
 #Brownian UI
 source("UI/geometricbrownianUi.R")
+
+#American Option UI
+source("UI/americanoptionUi.R")
 
 #About UI
 source("UI/aboutUi.R")

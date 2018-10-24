@@ -248,9 +248,40 @@ server_fun <- function(input, output, session) {
     }
   })
   
-  #Random Walk
-  output$random_1d <- renderUI({includeHTML("files/text_intro_valuation.html")})
-
+  #Random Walk 1D
+  #output$random_1d <- renderUI({includeHTML("files/text_intro_valuation.html")})
+  output$random_1d_plot <- renderPlot(
+    {
+      # Generate k random walks across time {0, 1, ... , T}
+      T <- input$steps_1dr
+      k <- input$walks_1dr
+      initial.value <- input$x_position_1dr
+      GetRandomWalk <- function() {
+        # Add a standard normal at each step
+        initial.value + c(0, cumsum(rnorm(T)))
+      }
+      # Matrix of random walks
+      values <- replicate(k, GetRandomWalk())
+      # Create an empty plot
+      #dev.new(height=8, width=12)
+      plot(0:T, rep(NA, T + 1), main=sprintf("%s Random Walks", k),
+          xlab="time", ylab="value",
+          ylim=initial.value + ((T+1)/2) * c(-1, 1))
+      mtext(sprintf("%s%s} with initial value of %s",
+                    "Across time {0, 1, ... , ", T, initial.value))
+      for (i in 1:k) {
+        lines(0:T, values[ , i], lwd=0.7, col=i)
+      }
+      #for (sign in c(-1, 1)) {
+      #  curve(initial.value + sign * 1.96 * sqrt(x), from=0, to=T,
+      #        n=2*T, col="darkred", lty=2, lwd=1.5, add=TRUE)
+      #}
+      #legend("topright", "1.96 * sqrt(t)",
+      #       bty="n", lwd=1.5, lty=2, col="darkred")
+      #savePlot("random_walks.png")
+    }
+  )
+  #Random Walk 2D
   resultRandom <- reactive({
     my_random_walk <- f1(input$steps)
     random_points <- c(input$x_position, input$y_position)
@@ -269,6 +300,23 @@ server_fun <- function(input, output, session) {
   output$final <- renderText({
     paste("(",tail(resultRandom()$trace,1)[1],",",tail(resultRandom()$trace,1)[2],")")
   })
+
+  #Geometric Brownain Motion Start
+  output$gbm_path_plot <- renderPlot(
+    {
+      mu=input$gbm_rate; sigma=input$gbm_volatility; P0=input$gbm_price; T = input$gbm_time/12
+      nt=input$gbm_trajectories; n=input$gbm_steps
+      #############Generate nt trajectories
+      dt=T/n; t=seq(0,T,by=dt)
+      X=matrix(rep(0,length(t)*nt), nrow=nt)
+      for (i in 1:nt) {X[i,]= GBM(x=P0,r=mu,sigma=sigma,T=T,N=n)}
+      ##Plot
+      ymax=max(X); ymin=min(X) #bounds for simulated prices
+      plot(t,X[1,],t='l',ylim=c(ymin, ymax), col=1,ylab="Price P(t)",xlab="Time t(years)")
+      for(i in 2:nt){lines(t,X[i,], t='l',ylim=c(ymin, ymax),col=i)}
+    }
+  )
+  #Geometric Brownain Motion End
 
   #About Page
   output$about_page <- renderUI({includeHTML("files/about.html")})

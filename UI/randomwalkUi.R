@@ -3,7 +3,21 @@ randomwalk_ui <- function() {
   fluidPage(
     tabsetPanel(
       tabPanel("Random Walk 1D",
-        htmlOutput("random_1d")        
+        sidebarLayout(
+          sidebarPanel(
+            numericInput("x_position_1dr", "x-axis start position:", 
+                        min = -10, max = 10, value  = 0),
+            sliderInput("steps_1dr", "Number of steps:",
+                        min=10, max=1000, value=50),
+            sliderInput("walks_1dr", "Number of Walks",
+                        min=1, max=300, value=5)
+          ),
+          
+          # Show a plot of the generated distribution
+          mainPanel(
+            plotOutput("random_1d_plot")
+          )
+        )
       ),
       tabPanel("Random Walk 2D",
         sidebarLayout(
@@ -35,6 +49,9 @@ randomwalk_ui <- function() {
                  tags$iframe(style="height:500px; width:100%; scrolling=yes", 
                   src="Random_Walks.pdf#zoom=50&toolbar=0&navpanes=0"
               )       
+      ),
+      tabPanel("Lab Exercise",
+      helpText("Coming Soon!!")
       )
     )
   )
