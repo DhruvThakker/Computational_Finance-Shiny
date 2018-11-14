@@ -8,7 +8,7 @@ randomwalk_ui <- function() {
             numericInput("x_position_1dr", "x-axis start position:", 
                         min = -10, max = 10, value  = 0),
             sliderInput("steps_1dr", "Number of steps:",
-                        min=10, max=1000, value=50),
+                        min=2, max=1000, value=50),
             sliderInput("walks_1dr", "Number of Walks",
                         min=1, max=300, value=5)
           ),
@@ -44,6 +44,12 @@ randomwalk_ui <- function() {
             plotOutput("path_plot")
           )
         )
+      ),
+      tabPanel("3D Random Walk",
+          mainPanel(
+            #helpText("Coming Soon!!")
+            plotlyOutput("plot3d")
+          )
       ),
       tabPanel("Lecture Notes", 
                  tags$iframe(style="height:500px; width:100%; scrolling=yes", 

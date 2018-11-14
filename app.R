@@ -14,10 +14,14 @@ library(knitr)
 library(magrittr)
 library(rmarkdown)
 library(shiny)
-
+library(plotly)
 library(fOptions)
 library(sde)
+library(DiagrammeR)
+#library(data.tree)
 source("R/functions.R")
+#source("R/bin.R")
+source("R/binomial.R")
 
 # uncomment this if the text-files should be recompiled
 # rmdfiles <- c("files/about.Rmd", "files/text_intro_options.Rmd", "files/text_intro_valuation.Rmd")

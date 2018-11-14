@@ -164,15 +164,21 @@ server_fun <- function(input, output, session) {
   
   # Prices & Valuation
   
-  output$price_binomial <- renderPlot({
-    create_tree(n_steps = input$I_price_n_steps,
-                type = ifelse(input$I_price_type == 1, "call", "put"),
-                s_0 = input$I_price_value_underlying, 
-                u = input$I_price_u, 
-                k = input$I_price_strike, 
-                rf = input$I_price_rf/100)
-  }, height = 700)
+  #output$price_binomial <- renderPlot({
+  #  create_tree(n_steps = input$euro_steps,
+  #              type = ifelse(input$euro_type == 1, "call", "put"),
+  #              s_0 = input$euro_stock, 
+  #              u = input$euro_u, 
+  #              k = input$euro_strike, 
+  #              rf = input$euro_rate/100)
+  #}, height = 700)
   
+  output$euro_binomial=renderGrViz({
+    x <- genlattice.european.reg(Asset=input$euro_stock, IntRate=input$euro_rate, Strike=input$euro_strike, NoSteps=input$euro_steps, U=input$euro_u, D=input$euro_d, Type=input$euro_type)
+    y <- capture.output(dotlattice(x, digits=3))
+    grViz(y)
+  })
+
   bs_data <- reactive({
     list(
       type = input$I_bs_type,
@@ -256,29 +262,29 @@ server_fun <- function(input, output, session) {
       T <- input$steps_1dr
       k <- input$walks_1dr
       initial.value <- input$x_position_1dr
-      GetRandomWalk <- function() {
-        # Add a standard normal at each step
-        initial.value + c(0, cumsum(rnorm(T)))
+
+      GetRandomWalk <- function(K=T,v=initial.value) {
+        # Add a bionomial at each step
+        samples = rbinom(K,1,0.5)
+        samples[samples==0] = -1
+        v + c(0, cumsum(samples))
       }
+
       # Matrix of random walks
       values <- replicate(k, GetRandomWalk())
       # Create an empty plot
       #dev.new(height=8, width=12)
+      #print(values)
+
       plot(0:T, rep(NA, T + 1), main=sprintf("%s Random Walks", k),
           xlab="time", ylab="value",
-          ylim=initial.value + ((T+1)/2) * c(-1, 1))
+          ylim=initial.value + ((T+10)/2) * c(-1, 1))
       mtext(sprintf("%s%s} with initial value of %s",
                     "Across time {0, 1, ... , ", T, initial.value))
       for (i in 1:k) {
         lines(0:T, values[ , i], lwd=0.7, col=i)
       }
-      #for (sign in c(-1, 1)) {
-      #  curve(initial.value + sign * 1.96 * sqrt(x), from=0, to=T,
-      #        n=2*T, col="darkred", lty=2, lwd=1.5, add=TRUE)
-      #}
-      #legend("topright", "1.96 * sqrt(t)",
-      #       bty="n", lwd=1.5, lty=2, col="darkred")
-      #savePlot("random_walks.png")
+
     }
   )
   #Random Walk 2D
@@ -301,6 +307,19 @@ server_fun <- function(input, output, session) {
     paste("(",tail(resultRandom()$trace,1)[1],",",tail(resultRandom()$trace,1)[2],")")
   })
 
+  #Random Walk 3D
+  output$plot3d <- renderPlotly({
+    data <- read.csv('https://raw.githubusercontent.com/plotly/datasets/master/_3d-line-plot.csv')
+
+    plot_ly(data, x = ~x1, y = ~y1, z = ~z1, type = 'scatter3d', mode = 'lines',
+        line = list(color = '#1f77b4', width = 1)) %>%
+        add_trace(x = ~x2, y = ~y2, z = ~z2,
+            line = list(color = 'rgb(44, 160, 44)', width = 1)) %>%
+        add_trace(x = ~x3, y = ~y3, z = ~z3,
+            line = list(color = 'bcbd22', width = 1))
+    #plot_ly(mtcars, x = ~mpg, y = ~wt)
+  })
+
   #Geometric Brownain Motion Start
   output$gbm_path_plot <- renderPlot(
     {
@@ -318,6 +337,13 @@ server_fun <- function(input, output, session) {
   )
   #Geometric Brownain Motion End
 
+  #American Binomial Begin
+  output$amer_binomial=renderGrViz({
+    x <- genlattice.american.reg(Asset=input$amer_stock, IntRate=input$amer_rate, Strike=input$amer_strike, NoSteps=input$amer_steps, U=input$amer_u, D=input$amer_d, Type=input$amer_type)
+    y <- capture.output(dotlattice(x, digits=3))
+    grViz(y)
+  })
+  #American Binomail End
   #About Page
   output$about_page <- renderUI({includeHTML("files/about.html")})
 
