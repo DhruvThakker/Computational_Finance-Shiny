@@ -18,9 +18,8 @@ library(plotly)
 library(fOptions)
 library(sde)
 library(DiagrammeR)
-#library(data.tree)
+
 source("R/functions.R")
-#source("R/bin.R")
 source("R/binomial.R")
 
 # uncomment this if the text-files should be recompiled

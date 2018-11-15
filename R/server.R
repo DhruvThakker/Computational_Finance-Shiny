@@ -309,15 +309,44 @@ server_fun <- function(input, output, session) {
 
   #Random Walk 3D
   output$plot3d <- renderPlotly({
-    data <- read.csv('https://raw.githubusercontent.com/plotly/datasets/master/_3d-line-plot.csv')
-
-    plot_ly(data, x = ~x1, y = ~y1, z = ~z1, type = 'scatter3d', mode = 'lines',
-        line = list(color = '#1f77b4', width = 1)) %>%
-        add_trace(x = ~x2, y = ~y2, z = ~z2,
-            line = list(color = 'rgb(44, 160, 44)', width = 1)) %>%
-        add_trace(x = ~x3, y = ~y3, z = ~z3,
-            line = list(color = 'bcbd22', width = 1))
-    #plot_ly(mtcars, x = ~mpg, y = ~wt)
+    
+    k=input$steps_3dr
+    xi=input$x_position_3dr
+    yi=input$y_position_3dr
+    zi=input$z_position_3dr
+    GetRandomWalk <- function(K=k,v=0) {
+        # Add a bionomial at each step
+        samples = rbinom(K,1,0.5)
+        samples[samples==0] = -1
+        v + c(0, cumsum(samples))
+    }
+    x1 = GetRandomWalk(v=xi)
+    y1 = GetRandomWalk(v=yi)
+    z1 = GetRandomWalk(v=zi)
+    plot_ly (
+      type = 'scatter3d' ,
+      name = '3d path',
+      x = x1 ,
+      y = y1 ,
+      z = z1 ,
+      mode = 'lines',
+      line = list(color = 'rgba(49,130,189, 1)', width = 2) ) %>%
+    add_trace(
+      x = x1[1], 
+      y = y1[1],
+      z = z1[1], 
+      type = 'scatter3d', 
+      name = 'Start',
+      mode = 'markers', 
+      marker = list(color = 'rgba(49,130,189, 1)', size = 5)) %>%
+    add_trace(
+      x = x1[k+1], 
+      y = y1[k+1],
+      z = z1[k+1], 
+      type = 'scatter3d',
+      name = 'End', 
+      mode = 'markers', 
+      marker = list(color = 'rgba(67,67,67,1)', size = 5))
   })
 
   #Geometric Brownain Motion Start

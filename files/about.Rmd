@@ -1,12 +1,12 @@
-version 0.1
+version 1(15th November 2015)
 
 Done as a part of B-Tech Mini Project
 
 Mentor : Prof. Jaideep Mulherkar
 
-Developer:
+Developers:
 
 Dhruv Thakker <br>
 Kaushal Patel <br>
-Manthan Patel <br>
-Dev Patel <br>
+
+[Github Project Link](https://github.com/DhruvThakker/Computational_Finance-Shiny)

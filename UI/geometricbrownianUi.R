@@ -31,7 +31,8 @@ geometricbrownian_ui <- function() {
               )       
       ),
       tabPanel("Lab Exercise",
-        helpText("Coming Soon!!")
+        helpText(   a("Random Walk Lab HackerRank", href="https://www.hackerrank.com", target="_blank"))
+        #helpText("Coming Soon!!")
       )
     )
   )

@@ -46,9 +46,23 @@ randomwalk_ui <- function() {
         )
       ),
       tabPanel("3D Random Walk",
-          mainPanel(
-            #helpText("Coming Soon!!")
-            plotlyOutput("plot3d")
+          sidebarLayout(
+            sidebarPanel(
+              numericInput("x_position_3dr", "x-axis start position:", 
+                          min = -10, max = 10, value  = 0),
+              numericInput("y_position_3dr", "y-axis start position:", 
+                          min = -10, max = 10, value  = 0),
+              numericInput("z_position_3dr", "z-axis start position:", 
+                          min = -10, max = 10, value  = 0),
+              sliderInput("steps_3dr", "Number of steps:",
+                          min=2, max=1000, value=50)
+              #sliderInput("walks_3dr", "Number of Walks",
+              #            min=1, max=5, value=1)
+          ),
+            mainPanel(
+              #helpText("Coming Soon!!")
+              plotlyOutput("plot3d")
+            )
           )
       ),
       tabPanel("Lecture Notes", 
@@ -57,7 +71,8 @@ randomwalk_ui <- function() {
               )       
       ),
       tabPanel("Lab Exercise",
-      helpText("Coming Soon!!")
+      helpText(   a("Random Walk Lab HackerRank", href="https://www.hackerrank.com", target="_blank"))
+      #helpText("Coming Soon!!")
       )
     )
   )
