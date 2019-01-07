@@ -34,3 +34,5 @@ To install all packages you can also use
 pkgs <- c("data.table", "DT", "ggplot2", "knitr", "magrittr", "rmarkdown", "fOptions", "shiny")
 install.packages(pkgs)
 ```
+Above instructions will help installing R and deploying shiny on local machine as well AWS with an open port. <br>
+For deploying on digital ocean follow this link: https://www.digitalocean.com/community/tutorials/how-to-set-up-shiny-server-on-ubuntu-16-04
