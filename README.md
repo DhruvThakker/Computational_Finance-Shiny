@@ -1,8 +1,22 @@
+# A shiny application to explore the basics of option valuations.
+## Instructions for installation and deployment on ubuntu.
 
-# Option Valuation
-A shiny application to explore the basics of option valuations
-
-To run the project either fork/download the files and run the `app.R`-file, or in R run
+1. Add GPG key <br> 
+```$ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9```
+2. Add R repository <br>
+```$ sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/' ```
+3. Update List <br>
+```$ sudo apt update ```
+4. Install R <br>
+```$ sudo apt install r-base ```
+5. Test R install as <br>
+```$  sudo -i R```
+6. In R terminal install shiny and other required packages with command <br>
+```r
+pkgs <- c("data.table", "DT", "ggplot2", "knitr", "magrittr", "rmarkdown", "fOptions", "shiny")
+install.packages(pkgs)
+```
+7. To run the project either fork/download the files and run the `app.R`-file, or in R run <br>
 ```r
 shiny::runGitHub('Computational_Finance-Shiny', 'DhruvThakker')
 ```
@@ -11,6 +25,7 @@ OR
 ```r
 shiny::runApp()
 ```
+
 In order to run the project properly, you need to have the following packages installed: `data.table`, `DT`, `ggplot2`, `knitr`, `magrittr`, `rmarkdown`, `fOptions`, and `shiny`.
 
 To install all packages you can also use 
@@ -19,34 +34,3 @@ To install all packages you can also use
 pkgs <- c("data.table", "DT", "ggplot2", "knitr", "magrittr", "rmarkdown", "fOptions", "shiny")
 install.packages(pkgs)
 ```
-
-If you find any bugs, or if you have ideas to advance this project, please reach out to me.
-
-<!--
-# Screenshots
-
-The following screenshots were taken from the app itself:
-
-
-## Payoff 
-
-Add financial options to a basket and see the overall payoff.
-
-![Payoff](https://github.com/DavZim/OptionValuation/raw/master/files/payoff.png)
-
-## Option Valuation
-
-Evaluate a financial option using a binomial tree approach.
-
-![binomial_tree](https://github.com/DavZim/OptionValuation/raw/master/files/binomial_tree.png)
-
-Or calculate the value of the option using the black-scholes approach.
-
-![black_scholes](https://github.com/DavZim/OptionValuation/raw/master/files/black_scholes.png)
-
-## Greeks
-
-Have a look at the sensitivity factors have on the greeks.
-
-![greeks](https://github.com/DavZim/OptionValuation/raw/master/files/greeks.png)
--->
